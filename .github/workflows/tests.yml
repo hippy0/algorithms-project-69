@@ -27,7 +27,7 @@ jobs:
         working-directory: ./app
         run: |
           chmod +x gradlew
-          gradlew test
+          ./gradlew test
 
       - name: Publish code coverage
         uses: paambaati/codeclimate-action@v3.0.0
