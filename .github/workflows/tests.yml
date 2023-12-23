@@ -1,4 +1,4 @@
-name: test-coverage
+name: Tests
 
 on: push
 
@@ -14,6 +14,7 @@ jobs:
         with:
           java-version: "21"
           distribution: "temurin"
+          architecture: x64
 
       - name: Build with Gradle
         uses: gradle/gradle-build-action@v2
@@ -22,6 +23,10 @@ jobs:
           gradle-version: 8.5
           build-root-directory: app
 
+      - name: Start tests
+        working-directory: ./app
+        run: ./gradlew test
+
       - name: Publish code coverage
         uses: paambaati/codeclimate-action@v3.0.0
         env:
@@ -29,4 +34,4 @@ jobs:
           JACOCO_SOURCE_PATH: app/src/main/java
         with:
           coverageCommand: make report
-          coverageLocations: ${{github.workspace}}/app/build/reports/jacoco/test/jacocoTestReport.xml:jacoco
+          coverageLocations: ${{github.workspace}}/app/jacocoReports/jacocoTestReport.xml:jacoco
