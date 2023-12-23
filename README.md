@@ -1,3 +1,5 @@
+# Simple search engine.
+
 ### Hexlet tests and linter status:
 [![Actions Status](https://github.com/hippy0/algorithms-project-69/actions/workflows/hexlet-check.yml/badge.svg)](https://github.com/hippy0/algorithms-project-69/actions)
 ### Text Coverage
