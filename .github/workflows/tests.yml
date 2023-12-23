@@ -24,8 +24,10 @@ jobs:
           build-root-directory: app
 
       - name: Start tests
-        working-directory: ./app
-        run: ./gradlew test
+        run: |
+          cd app
+          chmod +x gradlew
+          gradlew test
 
       - name: Publish code coverage
         uses: paambaati/codeclimate-action@v3.0.0
