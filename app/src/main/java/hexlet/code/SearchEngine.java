@@ -12,7 +12,7 @@ public class SearchEngine {
             return List.of();
         }
 
-        Map<String, Integer> approachMap = new HashMap<>();
+        Map<String, Double> approachMap = new HashMap<>();
 
         String sentenceTerm = Pattern.compile("\\w+")
                 .matcher(sentence)
@@ -22,6 +22,8 @@ public class SearchEngine {
 
         for (Map<String, String> doc : docs) {
             String text = doc.get("text");
+            text = text.replace("'", "");
+
             String textTerm = Pattern.compile("\\w+")
                     .matcher(text)
                     .results()
@@ -31,13 +33,14 @@ public class SearchEngine {
             for (String key : sentenceTerm.split(" ")) {
                 for (String word : textTerm.split(" ")) {
                     if (word.contentEquals(key)) {
-                        if (approachMap.containsKey(doc.get("id"))) {
-                            approachMap.put(doc.get("id"), approachMap.get(doc.get("id")) + 1);
-                        } else {
-                            approachMap.put(doc.get("id"), 1);
-                        }
-
-                        break;
+//                        if (approachMap.containsKey(doc.get("id"))) {
+//                            approachMap.put(doc.get("id"), approachMap.get(doc.get("id")) + 1);
+//                        } else {
+//                            approachMap.put(doc.get("id"), 1);
+//                        }
+//
+//                        break;
+                        approachMap.put(doc.get("id"), getTFxIDF(doc, docs, key));
                     }
                 }
             }
@@ -47,14 +50,63 @@ public class SearchEngine {
             return List.of();
         }
 
-        List<Map.Entry<String, Integer>> sortedListOfEntries = approachMap.entrySet()
+        List<Map.Entry<String, Double>> sortedListOfEntries = approachMap.entrySet()
                 .stream()
-                .sorted(Map.Entry.comparingByValue(Integer::compareTo))
+                .sorted(Map.Entry.comparingByValue(Double::compareTo))
                 .toList()
                 .reversed();
 
         return sortedListOfEntries.stream()
                 .map((Map.Entry::getKey))
                 .toList();
+    }
+
+    private static double getIDF(List<Map<String, String>> docs, String term) {
+        double idf = 0;
+
+        for (Map<String, String> doc : docs) {
+            String text = doc.get("text");
+            text = text.replace("'", "");
+
+            String textTerm = Pattern.compile("\\w+")
+                    .matcher(text)
+                    .results()
+                    .map(MatchResult::group)
+                    .collect(Collectors.joining(" "));
+
+            for (String word : textTerm.split(" ")) {
+                if (word.equalsIgnoreCase(term)) {
+                    idf++;
+                    break;
+                }
+            }
+        }
+
+        return Math.log(docs.size() / idf);
+    }
+
+    private static double getTF(Map<String, String> doc, String term) {
+        double tf = 0;
+
+        String text = doc.get("text");
+        text = text.replace("'", "");
+
+        String textTerm = Pattern.compile("\\w+")
+                .matcher(text)
+                .results()
+                .map(MatchResult::group)
+                .collect(Collectors.joining(" "));
+
+        for (String word : textTerm.split(" ")) {
+            if (word.equals(term)) {
+                tf++;
+            }
+        }
+
+        return tf / textTerm.split(" ").length;
+    }
+
+    private static double getTFxIDF(Map<String, String> doc, List<Map<String, String>> docs, String term) {
+        return getTF(doc, term) * getIDF(docs, term);
     }
 }

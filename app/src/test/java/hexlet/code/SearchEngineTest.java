@@ -36,7 +36,7 @@ public class SearchEngineTest {
     @Test
     void testSearchEngineWithMetrics() {
         List<String> actual = SearchEngine.search(docs, "shoot");
-        List<String> expected = List.of("doc1", "doc2");
+        List<String> expected = List.of("doc2", "doc1");
 
         Assertions.assertThat(actual).isEqualTo(expected);
     }
@@ -44,7 +44,7 @@ public class SearchEngineTest {
     @Test
     void testSearchEngineWithSticking() {
         List<String> actual = SearchEngine.search(docs, "shoot!!");
-        List<String> expected = List.of("doc1", "doc2");
+        List<String> expected = List.of("doc2", "doc1");
 
         Assertions.assertThat(actual).isEqualTo(expected);
     }
