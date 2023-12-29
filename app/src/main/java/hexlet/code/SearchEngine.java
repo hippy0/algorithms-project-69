@@ -1,5 +1,6 @@
 package hexlet.code;
 
+import java.util.Collections;
 import java.util.Map;
 import java.util.List;
 import java.util.HashMap;
@@ -52,11 +53,12 @@ public class SearchEngine {
             return List.of();
         }
 
-        List<Map.Entry<String, Double>> sortedListOfEntries = approachMap.entrySet()
+        List<Map.Entry<String, Double>> sortedListOfEntries = new java.util.ArrayList<>(approachMap.entrySet()
                 .stream()
                 .sorted(Map.Entry.comparingByValue(Double::compareTo))
-                .toList()
-                .reversed();
+                .toList());
+
+        Collections.reverse(sortedListOfEntries);
 
         return sortedListOfEntries.stream()
                 .map((Map.Entry::getKey))

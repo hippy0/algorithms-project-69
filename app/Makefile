@@ -1,14 +1,14 @@
 lint:
-	@./gradlew checkstyleMain checkstyleTest
+	gradlew checkstyleMain checkstyleTest
 
 test:
-	@./gradlew test
+	gradlew test
 
 build:
-	@./gradlew clean build
+	gradlew clean build
 
 report:
-	@./gradlew jacocoTestReport
+	gradlew jacocoTestReport
 
 
 .PHONY: build
